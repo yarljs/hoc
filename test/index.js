@@ -11,11 +11,7 @@ import {Fetchable} from '../src/index.js';
 // Make space for yarl in your store
 const defaultState = {
   yarl: {
-    getChuckStuff: {
-      data: null,
-      error: null,
-      loading: null,
-    }
+
   }
 }
 
@@ -27,10 +23,26 @@ const store = createStore(
 );
 
 
-class Test extends React.Component {
+class TestLoader extends React.Component {
   render() {
     return (
-      <div>Fooo Foo Foo</div>
+      <div>Choo Choo Loading</div>
+    )
+  }
+}
+
+class TestData extends React.Component {
+  render() {
+    return (
+      <div>Data...</div>
+    )
+  }
+}
+
+class TestError extends React.Component {
+  render() {
+    return (
+      <div>Error :(</div>
     )
   }
 }
@@ -47,9 +59,11 @@ const Container = Fetchable(
 const Root = () => {
   return (
     <Provider store={store}>
-      <Container>
-        <Test />
-      </Container>
+      <Container
+        Data={TestData}
+        Loader={TestLoader}
+        Error={TestError}
+      />
     </Provider>
   );
 }
