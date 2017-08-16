@@ -1,5 +1,5 @@
 {
-  "name": "hoc",
+  "name": "@yarljs/hoc",
   "version": "1.0.0",
   "description": "Higher Order React Components",
   "main": "index.js",
