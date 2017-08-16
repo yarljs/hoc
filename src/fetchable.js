@@ -56,7 +56,7 @@ export function Fetchable(fetching, params, transform) {
           const items = this.props.data.map((e, i) => {
             return <div className={`${fetching.slice}-data-item`} key={i}>{e}</div>
           })
-          body = <div className=${`${fetching.slice}-data-list`}></div>
+          body = <div className={`${fetching.slice}-data-list`}></div>
         }
         else if(typeof this.props.data === "object")
         {
