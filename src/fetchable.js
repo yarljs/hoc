@@ -3,8 +3,10 @@ import {connect} from 'react-redux'
 import yarlReduce from '@yarljs/reduce';
 import yarlFetch from '@yarljs/fetch';
 import * as PropTypes from 'prop-types';
+import defaultStyleMap from './styleMap';
+import defaultDataRenderer from './defaultDataRenderer';
 
-export function Fetchable(fetching, params, transform) {
+export function Fetchable(fetching, params, transform, styleMap=defaultStyleMap) {
   class FetchableContainer extends React.Component {
     constructor(props) {
       super(props)
@@ -26,7 +28,7 @@ export function Fetchable(fetching, params, transform) {
       }
       else
       {
-         return (<div className={`${fetching.slice}-error`}>{err.toString()}</div>)
+         return (<div className={`${fetching.slice} ${styleMap.error}`}>{err.toString()}</div>)
       }
     }
 
@@ -38,7 +40,7 @@ export function Fetchable(fetching, params, transform) {
       }
       else
       {
-         return (<div>loading...</div>)
+         return (<div className={`${fetching.slice} ${styleMap.loading}`}>Loading...</div>)
       }
     }
 
@@ -50,35 +52,7 @@ export function Fetchable(fetching, params, transform) {
       }
       else
       {
-        let body;
-        if(Array.isArray(this.props.data))
-        {
-          const items = this.props.data.map((e, i) => {
-            return <div className={`${fetching.slice}-data-item`} key={i}>{e}</div>
-          })
-          body = <div className={`${fetching.slice}-data-list`}></div>
-        }
-        else if(typeof this.props.data === "object")
-        {
-          body = Object.keys(this.props.data).map((e, i) => {
-            return (
-              <div key={i} className={`${fetching.slice}-data-${e}-container`}>
-                <div className={`${fetching.slice}-data-${e}-label`}>{e}</div>
-                <div className={`${fetching.slice}-data-${e}-value`}>{this.props.data[e]}</div>
-              </div>
-            )
-          })
-        }
-        else
-        {
-          body = <div className={`${fetching.slice}-data-value`}>{this.props.data.toString()}</div>
-        }
-
-        return (
-          <div className={`${fetching.slice}-data-container`}>
-            {body}
-          </div>
-        )
+        return defaultDataRenderer(fetching.slice, data, defaultStyleMap);
       }
     }
 
@@ -88,7 +62,7 @@ export function Fetchable(fetching, params, transform) {
         : (this.props.error) ? this.getError(this.props.error) : this.getData(this.props.data)
 
       return (
-        <div className={`${fetching.slice}-container`}>
+        <div className={`${fetching.slice} ${styleMap.container}`}>
           {body}
         </div>
       )
