@@ -3,10 +3,8 @@ import {connect} from 'react-redux'
 import yarlReduce from '@yarljs/reduce';
 import yarlFetch from '@yarljs/fetch';
 import * as PropTypes from 'prop-types';
-import defaultStyleMap from './styleMap';
-import defaultDataRenderer from './defaultDataRenderer';
 
-export function Fetchable(fetching, params, transform, styleMap=defaultStyleMap) {
+export function Fetchable(fetching, params, transform) {
   class FetchableContainer extends React.Component {
     constructor(props) {
       super(props)
@@ -28,7 +26,7 @@ export function Fetchable(fetching, params, transform, styleMap=defaultStyleMap)
       }
       else
       {
-         return (<div className={`${fetching.slice} ${styleMap.error}`}>{err.toString()}</div>)
+         return (<div>{err.toString()}</div>)
       }
     }
 
@@ -40,7 +38,7 @@ export function Fetchable(fetching, params, transform, styleMap=defaultStyleMap)
       }
       else
       {
-         return (<div className={`${fetching.slice} ${styleMap.loading}`}>Loading...</div>)
+         return (<div>Loading...</div>)
       }
     }
 
@@ -52,7 +50,7 @@ export function Fetchable(fetching, params, transform, styleMap=defaultStyleMap)
       }
       else
       {
-        return defaultDataRenderer(fetching.slice, data, defaultStyleMap);
+        return <div>{data.toString()}</div>
       }
     }
 
@@ -61,11 +59,23 @@ export function Fetchable(fetching, params, transform, styleMap=defaultStyleMap)
         ? this.getLoading(this.props.loading)
         : (this.props.error) ? this.getError(this.props.error) : this.getData(this.props.data)
 
-      return (
-        <div className={`${fetching.slice} ${styleMap.container}`}>
-          {body}
-        </div>
-      )
+      if(this.props.Container)
+      {
+        const Container = this.props.Container;
+        return (
+          <Container>
+            {body}
+          </Container>
+        )
+      }
+      else
+      {
+        return (
+          <div>
+            {body}
+          </div>
+        )
+      }
     }
   }
   FetchableContainer.contextTypes =  { store: PropTypes.object };
